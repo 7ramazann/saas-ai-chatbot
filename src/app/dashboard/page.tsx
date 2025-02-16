@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useAuth, SignOutButton } from "@clerk/nextjs"
@@ -16,16 +17,18 @@ export default function Dashboard() {
   }, [userId, router])
 
   return (
-    <div className="p-6 flex flex-col items-center">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-      <p>Welcome to your dashboard!</p>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-bl from-green-400 to-blue-300 text-gray-800">
+      <div className="bg-white shadow-2xl rounded-xl p-10 border border-gray-300 text-center">
+        <h1 className="text-4xl font-bold mb-6">📊 Dashboard</h1>
+        <p className="text-lg mb-6">Welcome to your personalized dashboard! 🎯</p>
 
-      {/* Sign Out Button */}
-      <SignOutButton>
-        <button className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md">
-          Sign Out
-        </button>
-      </SignOutButton>
+        {/* Sign Out Button */}
+        <SignOutButton>
+          <button className="px-6 py-3 bg-red-500 text-white font-semibold hover:bg-red-600 transition-all shadow-xl rounded-xl">
+            🔒 Sign Out
+          </button>
+        </SignOutButton>
+      </div>
     </div>
   )
 }

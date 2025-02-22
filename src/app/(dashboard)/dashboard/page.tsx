@@ -1,34 +1,33 @@
+import { currentUser } from "@clerk/nextjs/server";
+import React from "react";
+import Sidebar from "@/components/dashboard/sidebar";
 
-"use client"
+export default async function DashboardPage() {
+  const user = await currentUser();
 
-import { useAuth, SignOutButton } from "@clerk/nextjs"
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
-
-export default function Dashboard() {
-  const { userId } = useAuth()
-  const router = useRouter()
-
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (!userId) {
-      router.push("/auth/sign-in")
-    }
-  }, [userId, router])
+  if (!user) {
+    return (
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h1 className="text-xl font-bold text-gray-800">You need to log in!</h1>
+            <p className="text-gray-600">Please log in to access your dashboard.</p>
+          </div>
+        </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-bl from-green-400 to-blue-300 text-gray-800">
-      <div className="bg-white shadow-2xl rounded-xl p-10 border border-gray-300 text-center">
-        <h1 className="text-4xl font-bold mb-6">📊 Dashboard</h1>
-        <p className="text-lg mb-6">Welcome to your personalized dashboard! 🎯</p>
+      <div className="flex">
+        <Sidebar />
+        <div className="flex-1 p-6">
+          <h1 className="text-2xl font-bold text-gray-800">Welcome, {user.firstName}!</h1>
+          <p className="text-gray-600">This is your dashboard.</p>
 
-        {/* Sign Out Button */}
-        <SignOutButton>
-          <button className="px-6 py-3 bg-red-500 text-white font-semibold hover:bg-red-600 transition-all shadow-xl rounded-xl">
-            🔒 Sign Out
-          </button>
-        </SignOutButton>
+          <div className="mt-6 grid grid-cols-2 gap-4">
+            <div className="bg-blue-500 text-white p-4 rounded-lg">Widget 1</div>
+            <div className="bg-green-500 text-white p-4 rounded-lg">Widget 2</div>
+          </div>
+        </div>
       </div>
-    </div>
-  )
+  );
 }

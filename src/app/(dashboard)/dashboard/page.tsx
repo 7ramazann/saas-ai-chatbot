@@ -22,11 +22,6 @@ export default async function DashboardPage() {
         <div className="flex-1 p-6">
           <h1 className="text-2xl font-bold text-gray-800">Welcome, {user.firstName}!</h1>
           <p className="text-gray-600">This is your dashboard.</p>
-
-          <div className="mt-6 grid grid-cols-2 gap-4">
-            <div className="bg-blue-500 text-white p-4 rounded-lg">Widget 1</div>
-            <div className="bg-green-500 text-white p-4 rounded-lg">Widget 2</div>
-          </div>
         </div>
       </div>
   );

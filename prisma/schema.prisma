@@ -13,54 +13,121 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Models
 model User {
-  id         String    @id @default(uuid()) // Primary Key
-  fullname   String
-  clerkId    String    @unique
-  type       String
-  stripeId   String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id        String   @id @default(uuid())
+  fullname  String
+  clerkId   String
+  type      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  stripeId  String?
 
-  billing    Billings? // ✅ No need to add `@relation` here, Prisma auto-detects
-  compaigns  Compaign[]
-  domains    Domain[]
+  // Relations
+  billings  Billings[]
+  campaigns Campaign[]
+  domains   Domain[]
 }
 
 model Billings {
-  id       String @id @default(uuid()) // Primary Key
-  plan     Plans
+  id       String @id @default(uuid())
+  plan     String
   credits  Int
-  userId   String @unique @map("user_id")
-
-  user     User   @relation(fields: [userId], references: [id]) // ✅ Define relation here
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
 }
 
-
-model Compaign {
-  id         String    @id @default(uuid()) // Primary Key
+model Campaign {
+  id         String   @id @default(uuid())
   name       String
-  customers  String[]  // Array of customers
+  customers  String[]
   userId     String
-  createdAt  DateTime  @default(now())
-
+  createdAt  DateTime @default(now())
   user       User     @relation(fields: [userId], references: [id])
-  domains    Domain[]
+
+  // Relations
+  domains Domain[]
 }
 
 model Domain {
-  id         String   @id @default(uuid()) // Primary Key
-  name       String
-  icon       String?
-  userId     String
-  compaignId String
+  id          String   @id @default(uuid())
+  name        String
+  icon        String
+  userId      String
+  campaignId  String
+  user        User     @relation(fields: [userId], references: [id])
+  campaign    Campaign @relation(fields: [campaignId], references: [id])
 
-  user       User      @relation(fields: [userId], references: [id])
-  compaign   Compaign  @relation(fields: [compaignId], references: [id])
+  // Relations
+  chatbots       Chatbot[]
+  filtersQuestions FiltersQuestions[]
+  customers       Customer[]
+  products        Product[]
+  bookings        Bookings[]
 }
 
-enum Plans {
-  FREE
-  BASIC
-  PREMIUM
+model Chatbot {
+  id              String @id @default(uuid())
+  welcomeMessage  String
+  icon            String
+  background      String
+  textColor       String
+  helpdesk        Boolean
+  domainId        String
+  domain          Domain @relation(fields: [domainId], references: [id])
+
+  // Relations
+  chatMessages ChatMessage[]
+}
+
+model FiltersQuestions {
+  id         String @id @default(uuid())
+  question   String
+  answer     String
+  demand     String
+  domainId   String
+  domain     Domain @relation(fields: [domainId], references: [id])
+}
+
+model Customer {
+  id        String @id @default(uuid())
+  email     String
+  demand    String
+  domainId  String
+  domain    Domain @relation(fields: [domainId], references: [id])
+
+  // Relations
+  bookings Bookings[]
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  price       Int
+  image       String
+  createdAt   DateTime @default(now())
+  domainId    String
+  domain      Domain @relation(fields: [domainId], references: [id])
+}
+
+model Bookings {
+  id        String   @id @default(uuid())
+  date      DateTime
+  email     String
+  customerId String
+  domainId  String
+  createdAt DateTime @default(now())
+  domain    Domain @relation(fields: [domainId], references: [id])
+  customer  Customer @relation(fields: [customerId], references: [id])
+}
+
+model ChatMessage {
+  id            String   @id @default(uuid())
+  message       String
+  role          String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  chatRoomId    String
+  seen          Boolean
+  chatRoom      Chatbot  @relation(fields: [chatRoomId], references: [id])
 }

@@ -1,13 +1,17 @@
-import { clerkMiddleware } from "@clerk/nextjs/server"
-import { NextResponse } from "next/server"
+import {clerkMiddleware, createRouteMatcher} from "@clerk/nextjs/server"
 
-export default clerkMiddleware()
+const isPublicRoute = createRouteMatcher(['/api(.*)','/auth(.*)', '/']);
+
+export default clerkMiddleware(async (auth, request) => {
+  if (!isPublicRoute(request)) {
+    await auth.protect()
+  }
+})
 
 export const config = {
   matcher: [
-    // Apply middleware to all routes except static files and Next.js internals
-    "/((?!_next|.*\\..*|api/auth).*)",
-    "/api/(.*)",
-    "/dashboard",
+
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    '/(api|trpc)(.*)',
   ],
 }

@@ -1,0 +1,33 @@
+import { currentUser } from "@clerk/nextjs/server";
+import React from "react";
+import Sidebar from "@/components/dashboard/sidebar";
+
+export default async function DashboardPage() {
+  const user = await currentUser();
+
+  if (!user) {
+    return (
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h1 className="text-xl font-bold text-gray-800">You need to log in!</h1>
+            <p className="text-gray-600">Please log in to access your dashboard.</p>
+          </div>
+        </div>
+    );
+  }
+
+  return (
+      <div className="flex">
+        <Sidebar />
+        <div className="flex-1 p-6">
+          <h1 className="text-2xl font-bold text-gray-800">Welcome, {user.firstName}!</h1>
+          <p className="text-gray-600">This is your dashboard.</p>
+
+          <div className="mt-6 grid grid-cols-2 gap-4">
+            <div className="bg-blue-500 text-white p-4 rounded-lg">Widget 1</div>
+            <div className="bg-green-500 text-white p-4 rounded-lg">Widget 2</div>
+          </div>
+        </div>
+      </div>
+  );
+}

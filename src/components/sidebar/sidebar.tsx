@@ -2,20 +2,20 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, LogOut, Calendar, Sun, Moon, ChevronDown, ChevronRight } from "lucide-react";
+import {Menu, LogOut, Calendar, Sun, Moon, ChevronDown, ChevronRight, GlobeIcon} from "lucide-react";
 import { SignOutButton } from "@clerk/nextjs";
 import DashboardIcon from "@/icons/dashboard-icon";
 import ChatIcon from "@/icons/chat-icon";
 import IntegrationsIcon from "@/icons/integrations-icon";
 import EmailIcon from "@/icons/email-icon";
 import SettingsIcon from "@/icons/settings-icon";
-import DevicesIcon from "@/icons/devices-icon";
 
 const menuItems = [
     { label: "Dashboard", href: "/dashboard", icon: <DashboardIcon /> },
     { label: "Conversations", href: "/conversations", icon: <ChatIcon /> },
     { label: "Integrations", href: "/integrations", icon: <IntegrationsIcon /> },
     { label: "Appointments", href: "/appointments", icon: <Calendar /> },
+    { label: "Domains", href: "/domains", icon: <GlobeIcon /> },
 ];
 
 const optionsItems = [
@@ -79,12 +79,6 @@ const Sidebar = () => {
                     <button onClick={toggleTheme} className="flex items-center gap-2 hover:bg-sky-700">
                         {darkMode ? <Moon size={20} /> : <Sun size={20} />}
                         {!collapsed && <span>{darkMode ? "Dark" : "Light"}</span>}
-                    </button>
-                </div>
-
-                <div className="p-3">
-                    <button onClick={toggleTheme} className="flex items-center gap-2 hover:bg-sky-700">
-                        {!collapsed && <DevicesIcon />}
                     </button>
                 </div>
 

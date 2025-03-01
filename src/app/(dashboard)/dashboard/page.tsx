@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import React from "react";
-import Sidebar from "@/components/dashboard/sidebar";
+import Sidebar from "@/components/sidebar/sidebar";
 
 export default async function DashboardPage() {
   const user = await currentUser();
